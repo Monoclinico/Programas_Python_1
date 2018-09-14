@@ -1,1 +1,1 @@
-# pequenos_programas
+# pequenos programas em Python
