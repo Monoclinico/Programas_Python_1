@@ -13,14 +13,16 @@ from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.floatlayout import FloatLayout
-
+from time import sleep
  
 class Calcu(App):
 
   def build(self):
     self.icon = 'calculadora_icone.png'
     global lista_ex
+    global p_l 
     lista_ex = []
+    p_l = 0
     layout = FloatLayout()
     #
     #widget dos resultados
@@ -139,27 +141,57 @@ class Calcu(App):
     botao_apagar_parte.size_hint = (0.1666,0.1666)
     botao_apagar_parte.pos_hint = {'x':0.8333,'top':0.333}
 
+    #funções
+    def div_zero():
+      if 'Não divida por zero' in area_text_1.text:
+        apagar_area()
+
     def escreve_area_main(ins):
       def escreve_area_():
-        lista_ex.append(ins.text)
+        div_zero()
+        global p_l
+        if ins.text == "(":
+          p_l += 1
+        elif ins.text == ")":
+          p_l -= 1
+        texto_p = ins.text
+        if (len(lista_ex) == 0) and (ins.text in ['-','*','/','+','.']):
+          lista_ex.append('0')
+          lista_ex.append(texto_p)
+        else:
+          lista_ex.append(texto_p)
         area_text_1.text = ''.join(lista_ex)
       return escreve_area_
+
     def escreve_area_resposta():
+      div_zero()
       express = area_text_1.text
+      express = express.strip()
 
-
-      comp = eval(express)
-      area_text_1.text = str(comp)
+      if '/0' in express:
+        area_text_1.text = 'Não divida por zero'
+      else: 
+        if not(express == '') and p_l == 0: 
+          comp = eval(express)
+          comp = str(comp)
+          area_text_1.text = comp
+        else:
+          apagar_area()
       lista_ex.clear()
-      lista_ex.append(area_text_1.text)
-      print(area_text_1.text)
+      comp = list(comp)
+      lista_ex.extend(comp)
+
     def apagar_area():
       lista_ex.clear()
+      global p_l
+      p_l = 0
       area_text_1.text = ''
     def apagar_expressao():
+      div_zero()
       if len(lista_ex) >0:
         lista_ex.pop()
       area_text_1.text = ''.join(lista_ex)
+
     #eventos
     for _bb in range(10):
       exec("botao_{0}.on_press = escreve_area_main(botao_{0})".format(_bb))
