@@ -13,6 +13,7 @@ from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.floatlayout import FloatLayout
+<<<<<<< HEAD
 from time import sleep
  
 class Calcu(App):
@@ -23,6 +24,18 @@ class Calcu(App):
 
     layout = FloatLayout()
 
+=======
+
+
+class Calcu(App):
+
+  def build(self):
+    self.icon = 'calculadora_icone.png'
+    global lista_ex
+    lista_ex = []
+    layout = FloatLayout()
+    #
+>>>>>>> c4a83c3107a860281f48cbe6c33352b111e4c59c
     #widget dos resultados
     area_text_1 = TextInput()
     area_text_1.multiline = True
@@ -139,6 +152,7 @@ class Calcu(App):
     botao_apagar_parte.size_hint = (0.1666,0.1666)
     botao_apagar_parte.pos_hint = {'x':0.8333,'top':0.333}
 
+<<<<<<< HEAD
     #funções---------------------------------------------
 
     def escreve_area_main(ins):
@@ -187,6 +201,27 @@ class Calcu(App):
       area_text_1.text = str(''.join(Calcu.lista_ex))
 
     #eventos------------------------------------------
+=======
+    def escreve_area_main(ins):
+      def escreve_area_():
+        lista_ex.append(ins.text)
+        area_text_1.text = ''.join(lista_ex)
+      return escreve_area_
+    def escreve_area_resposta():
+      express = area_text_1.text
+      comp = eval(express)
+      area_text_1.text = str(comp)
+      lista_ex.clear()
+      lista_ex.append(area_text_1.text)
+    def apagar_area():
+      lista_ex.clear()
+      area_text_1.text = ''
+    def apagar_expressao():
+      if len(lista_ex) >0:
+        lista_ex.pop()
+      area_text_1.text = ''.join(lista_ex)
+    #eventos
+>>>>>>> c4a83c3107a860281f48cbe6c33352b111e4c59c
     for _bb in range(10):
       exec("botao_{0}.on_press = escreve_area_main(botao_{0})".format(_bb))
     
@@ -200,6 +235,7 @@ class Calcu(App):
     botao_resultado.on_press = escreve_area_resposta
     botao_apagar.on_press = apagar_area
     botao_apagar_parte.on_press = apagar_expressao
+<<<<<<< HEAD
     #add_wiget-------------------------------------------
     #area de texto
     layout.add_widget(area_text_1)
@@ -207,6 +243,15 @@ class Calcu(App):
     for _bb in range(10):
       exec("layout.add_widget(botao_{0})".format(_bb))
   
+=======
+    #add_wiget
+    #area de texto
+    layout.add_widget(area_text_1)
+    #botões
+    for _bb in range(10):
+      exec("layout.add_widget(botao_{0})".format(_bb))
+    #operações
+>>>>>>> c4a83c3107a860281f48cbe6c33352b111e4c59c
     layout.add_widget(botao_ponto)
     layout.add_widget(botao_soma)
     layout.add_widget(botao_subtr)
@@ -220,9 +265,16 @@ class Calcu(App):
     return layout
 
 from kivy.core.window import Window
+<<<<<<< HEAD
 Window.size = (250,400)
 Window.fullscreen = False
 Window.clearcolor = [0,1,0,0]#verde
 Window.set_system_cursor('hand')
 if __name__ == '__main__':
   Calcu(title="Calculadora").run()
+=======
+Window.size = (300,300)
+
+if __name__ == '__main__':
+  Calcu(title="Calculadora").run()
+>>>>>>> c4a83c3107a860281f48cbe6c33352b111e4c59c
