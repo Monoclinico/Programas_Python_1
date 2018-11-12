@@ -16,15 +16,13 @@ from kivy.uix.floatlayout import FloatLayout
 from time import sleep
  
 class Calcu(App):
-
+  lista_ex = []
+  _sinal = None
   def build(self):
     self.icon = 'calculadora_icone.png'
-    global lista_ex
-    global p_l 
-    lista_ex = []
-    p_l = 0
+
     layout = FloatLayout()
-    #
+
     #widget dos resultados
     area_text_1 = TextInput()
     area_text_1.multiline = True
@@ -141,58 +139,54 @@ class Calcu(App):
     botao_apagar_parte.size_hint = (0.1666,0.1666)
     botao_apagar_parte.pos_hint = {'x':0.8333,'top':0.333}
 
-    #funções
-    def div_zero():
-      if 'Não divida por zero' in area_text_1.text:
-        apagar_area()
+    #funções---------------------------------------------
 
     def escreve_area_main(ins):
       def escreve_area_():
-        div_zero()
-        global p_l
-        if ins.text == "(":
-          p_l += 1
-        elif ins.text == ")":
-          p_l -= 1
-        texto_p = ins.text
-        if (len(lista_ex) == 0) and (ins.text in ['-','*','/','+','.']):
-          lista_ex.append('0')
-          lista_ex.append(texto_p)
-        else:
-          lista_ex.append(texto_p)
-        area_text_1.text = ''.join(lista_ex)
+        if len(Calcu.lista_ex) > 0:
+          if Calcu.lista_ex[-1] in ['+','-','*','/','.']:
+            if ins.text in ['+','-','*','/','.']:
+              Calcu.lista_ex.pop()
+        Calcu._sinal = 0
+        if ('.' in Calcu.lista_ex) and (ins.text == '.'):
+          
+          for _cc in Calcu.lista_ex[((len(Calcu.lista_ex)-(Calcu.lista_ex[::-1].index('.'))-1)+2):]:
+            if _cc in ['+','-','*','/']:
+              Calcu._sinal += 1
+          if Calcu._sinal == 0:
+            Calcu._sinal = -1
+        Calcu.lista_ex.append(ins.text)
+        if Calcu._sinal < 0:
+          Calcu.lista_ex.pop()
+        if Calcu.lista_ex[0] in ['+','-','*','/','.']:
+          Calcu.lista_ex.insert(0,'0')  
+          
+        area_text_1.text = str(''.join(Calcu.lista_ex))
       return escreve_area_
 
     def escreve_area_resposta():
-      div_zero()
-      express = area_text_1.text
-      express = express.strip()
-
-      if '/0' in express:
-        area_text_1.text = 'Não divida por zero'
-      else: 
-        if not(express == '') and p_l == 0: 
-          comp = eval(express)
-          comp = str(comp)
-          area_text_1.text = comp
-        else:
-          apagar_area()
-      lista_ex.clear()
-      comp = list(comp)
-      lista_ex.extend(comp)
+        
+      lista_teste = ''.join(Calcu.lista_ex)
+      try:
+        lista_teste = eval(lista_teste)
+      except:
+        lista_teste = 'Erro'
+        Calcu.lista_ex.clear()
+        area_text_1.text = str(lista_teste)
+        return
+      area_text_1.text = str(lista_teste)
+      Calcu.lista_ex = list(str(lista_teste))
 
     def apagar_area():
-      lista_ex.clear()
-      global p_l
-      p_l = 0
-      area_text_1.text = ''
+      Calcu.lista_ex.clear()
+      area_text_1.text = str(''.join(Calcu.lista_ex))
     def apagar_expressao():
-      div_zero()
-      if len(lista_ex) >0:
-        lista_ex.pop()
-      area_text_1.text = ''.join(lista_ex)
 
-    #eventos
+      if len(Calcu.lista_ex) >0:
+        Calcu.lista_ex.pop()
+      area_text_1.text = str(''.join(Calcu.lista_ex))
+
+    #eventos------------------------------------------
     for _bb in range(10):
       exec("botao_{0}.on_press = escreve_area_main(botao_{0})".format(_bb))
     
@@ -206,13 +200,13 @@ class Calcu(App):
     botao_resultado.on_press = escreve_area_resposta
     botao_apagar.on_press = apagar_area
     botao_apagar_parte.on_press = apagar_expressao
-    #add_wiget
+    #add_wiget-------------------------------------------
     #area de texto
     layout.add_widget(area_text_1)
-    #botões
+    #botões na tela
     for _bb in range(10):
       exec("layout.add_widget(botao_{0})".format(_bb))
-    #operações
+  
     layout.add_widget(botao_ponto)
     layout.add_widget(botao_soma)
     layout.add_widget(botao_subtr)
