@@ -1,8 +1,9 @@
-arquivo = open('textos/texto_para_analisar.txt')
+
+arquivo = open('texto_analisar.txt','rt')
 texto = arquivo.read()
 arquivo.close()
 
-arquivo = open('textos/texto_para_analisar.txt')
+arquivo = open('texto_analisar.txt', 'rt')
 texto_original = arquivo.read()
 arquivo.close()
 
@@ -33,7 +34,7 @@ for x in range(len(lista_abc)):
 #        print('({}) = {:.2f}%'.format(lista_abc[x], p))
         texto_p += '\n({}) = {:.2f}%'.format(lista_abc[x], p)
 
-arquivo2 = open('textos/char_porcentagem.txt','w')
+arquivo2 = open('char_porcentagem.txt','w')
 arquivo2.write(texto_original + texto_p)
 arquivo2.close()
 
