@@ -31,7 +31,6 @@ for x in range(len(lista_abc)):
     n = texto.count(lista_abc[x])
     p = (n / len(texto)) * 100
     if p > 0:
-#        print('({}) = {:.2f}%'.format(lista_abc[x], p))
         texto_p += '\n({}) = {:.2f}%'.format(lista_abc[x], p)
 
 arquivo2 = open('char_porcentagem.txt','w')
