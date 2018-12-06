@@ -23,11 +23,19 @@ ir = ganho_t * 0.11
 inss = ganho_t * 0.08
 sind = ganho_t * 0.05
 ganho_l = ganho_t - (ir + inss + sind)
+<<<<<<< HEAD
 print('+Salário Bruto: R$ {0:.2f}\n'
   '-IR (11%): R$ {1:.2f}\n'
   '-INSS (8%): R$ {2:.2f}\n'
   '-Sindicato (5%): R$ {3:.2f}\n'
   '=Salário Líquido: R$ {4:.2f}'.format(ganho_t,ir,inss,sind,ganho_l))
+=======
+print('+Salário Bruto: R$ {:.2f}\n'
+  '-IR (11%): R$ {:.2f}\n'
+  '-INSS (8%): R$ {:.2f}\n'
+  '-Sindicato (5%): R$ {:.2f}\n'
+  '=Salário Líquido: R$ {:.2f}'.format(ganho_t,ir,inss,sind,ganho_l))
+>>>>>>> teste
 
 
 
