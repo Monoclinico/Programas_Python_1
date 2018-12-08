@@ -15,7 +15,6 @@ Um posto está vendendo combustíveis com a seguinte tabela de descontos:
 def escreva_preco(p):
   print('Preço total: R$ {:.2f}'.format(p))
 
-
 def preco(ti,v):
   p = 0
   a = 1.90
@@ -34,7 +33,6 @@ def preco(ti,v):
       p = p - (p * 0.04) 
   return escreva_preco(p) 
 
-
 def volume_e_tipo():
   while True:
     try:
@@ -49,7 +47,6 @@ def volume_e_tipo():
         continue
   return preco(tipo,vol)     
 
-
 def tabela_precos():
   print(format('Álcool','=^49'))
   print('|',format('até 20 litros','^18'),'|','3% de desconto por litro','|')
@@ -59,7 +56,6 @@ def tabela_precos():
   print('|',format('até 20 litros','^18'),'|','4% de desconto por litro','|')
   print('|', format('acima de 20 litros','^18'),'|', '6% de desconto por litro','|')
   print(format('=','=^49'))
-
 
 tabela_precos()
 volume_e_tipo()
