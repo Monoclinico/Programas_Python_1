@@ -13,7 +13,6 @@ def leitura():
       break
   bytes_ps = v / 8
   tempo = t / bytes_ps
-  
   seg = tempo % 60
   minu = (tempo - seg) // 60
   
