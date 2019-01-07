@@ -8,15 +8,17 @@ import csv, os
 
 #fução que abre o arquivo tabela1.csv
 def abrir_tabela():
+  caminho_csv = r'\tabela1.csv' 
   try:
-    with open('tabela1.csv', newline='') as arquivo_tabela:
+    with open(caminho_csv, newline='\n') as arquivo_tabela:
       arquivo_tabela_leitura = csv.reader(arquivo_tabela,delimiter=';')
       arquivo_tabela_leitura = list(arquivo_tabela_leitura)
       return arquivo_tabela_leitura
   except:
     caminho_abs = os.getcwd()
-    caminho_abs += '\\tabela1.csv' 
-    with open(caminho_abs, newline='') as arquivo_tabela:
+    caminho_abs += caminho_csv
+    caminho_abs = os.path.normpath(caminho_abs)
+    with open(caminho_abs, newline='\n') as arquivo_tabela:
       arquivo_tabela_leitura = csv.reader(arquivo_tabela,delimiter=';')
       arquivo_tabela_leitura = list(arquivo_tabela_leitura)
       return arquivo_tabela_leitura
@@ -76,6 +78,24 @@ def nota(lis):
   print('| {:>3}{:^30}= R$ {:.2f}'.format('','Total',soma_total))
   print('='*60)
 
-#invoca as funções 
-arquivo_tabela_leitura = abrir_tabela()
-nota(perguntas())
+def fazer_e_repetir():
+  def pergunta():
+    while True:
+      p = str(input(r'Encerrar(s/n)?')).lower().strip()
+      if p not in ('s','n'):
+        continue
+      else:
+        if p == 's':
+          return 1
+        else:
+          return 0
+
+  while True:
+    global arquivo_tabela_leitura
+    arquivo_tabela_leitura = abrir_tabela()
+    nota(perguntas())
+    if pergunta():
+      break
+    else:
+      continue  
+fazer_e_repetir()
