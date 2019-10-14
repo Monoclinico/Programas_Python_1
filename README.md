@@ -5,3 +5,5 @@
 - [x] Há um verificador de formato de endereço de ip. [Veja Aqui](ip_verificador.py)
 - [x] Pequeno Banco de Dados de agenda telefônica usando o a estrutura de dados "dicionário" do Python. [Veja Aqui](BD.py)
 - [x] Verificador simples de sequências strings para saber se é um palíndromo. [Veja Aqui](palindromo.py)  
+- [x] Módulo para criptografia e descriptografia de Júlio Cesar V1.0. [Veja Aqui](criptografia_cesar.py)
+- [x] Algoritmo que lê o número de litros vendidos e o tipo de combustível. Calcula e imprime o valor a ser pago pelo cliente. [Veja Aqui](combustivel.py)
