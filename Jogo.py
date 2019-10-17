@@ -1,6 +1,5 @@
 #importa bibliotecas
 from random import randint
-from time import sleep
 
 #escolhe um número aleatório de 1 a 10
 print('JOGO DA ADIVINHAÇÃO 1.0')
