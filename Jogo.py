@@ -5,7 +5,7 @@ from random import randint
 #escolhe um número aleatório de 1 a 10
 while True:
   print('='*50)
-  print('JOGO DA ADIVINHAÇÃO 3.0')
+  print('JOGO DA ADIVINHACAO 3.0')
   print('Acerte o numero que o computador escolher')
   print('Escolha o tamanho do grupo de numeros para jogar:')
   print('[1]facil: 1 ate 10')
