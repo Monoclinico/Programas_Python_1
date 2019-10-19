@@ -66,7 +66,7 @@ while True:
             if (numero % multiplo_aleatorio == 0):
               print('Dica: o numero e multiplo de ',multiplo_aleatorio)
             else:
-              print('Dica: o numero nao multiplo de ',multiplo_aleatorio)
+              print('Dica: o numero nao e multiplo de ',multiplo_aleatorio)
                 
           else:
             while True:
