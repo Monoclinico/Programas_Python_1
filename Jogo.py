@@ -5,7 +5,7 @@ from random import randint
 #escolhe um número aleatório de 1 a 10
 while True:
   print('='*50)
-  print('JOGO DA ADIVINHACAO 3.0')
+  print('JOGO DA ADIVINHACAO 3.1')
   print('Acerte o numero que o computador escolher')
   print('Escolha o tamanho do grupo de numeros para jogar:')
   print('[1]facil: 1 ate 10')
@@ -55,7 +55,7 @@ while True:
         break
       else:
         if(escolha not in ultima_escolha):
-          dica_tipo = randint(1,3)
+          dica_tipo = randint(1,4)
           if (dica_tipo == 1):
             if(numero %2 ==0):
               print('Dica: o numero e par')
@@ -67,7 +67,9 @@ while True:
               print('Dica: o numero e multiplo de ',multiplo_aleatorio)
             else:
               print('Dica: o numero nao e multiplo de ',multiplo_aleatorio)
-                
+          elif (dica_tipo == 3):
+            soma_numero = sum(list( [ float(c) for c in (str(numero))]))
+            print('Dica: a soma dos digitos do numero e ', soma_numero)
           else:
             while True:
               escolha_aleatoria = randint(1,limite)
