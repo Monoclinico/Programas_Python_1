@@ -12,12 +12,13 @@ while True:
   print('[2]medio: 1 ate 100')
   print('[3]dificil: 1 ate 1000')
   print('[4]mais dificil: 1 ate 10000')
+  print('[5]super dificil: 1 ate 100000')
 
 
   while True:
     try:
       limite = int(input('Qual sua escolha?'))
-      if (limite in [1,2,3,4]):
+      if (limite in [1,2,3,4,5]):
         limite = 10 ** limite
         break
       else:
