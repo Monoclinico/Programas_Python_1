@@ -19,42 +19,52 @@ def preco(ti,v):
   p = 0
   a = 1.90
   g = 2.50
+  d = 3.45
   if ti == 'A':
     p = v * a
     if v > 20:
-      p = p - (p * 0.05) 
+      p -= (p * 0.05) 
     else:
-      p = p - (p * 0.03) 
-  else:
+      p -= (p * 0.03) 
+  elif (ti == 'G'):
     p = v * g 
     if v > 20:
-      p = p - (p * 0.06) 
+      p -= (p * 0.06) 
     else:
-      p = p - (p * 0.04) 
+      p -= (p * 0.04) 
+  else:
+    p = v * d
+    if v > 20:
+      p -= (p * 0.07) 
+    else:
+      p -= (p * 0.05) 
   return escreva_preco(p) 
 
 def volume_e_tipo():
   while True:
     try:
       vol = float(input('Volume de combustível em litros: '))
-      tipo = str(input('Tipo de combustível: gasolina(G) ou álcool(A): ')).strip().upper()
+      tipo = str(input('Tipo de combustível: gasolina(G) ou álcool(A) ou diesel(D): ')).strip().upper()
     except:
       continue
     else:
-      if (vol >= 0) and (tipo in ['A','G']):
+      if (vol >= 0) and (tipo in ['A','G','D']):
         break
       else:
         continue
   return preco(tipo,vol)     
 
 def tabela_precos():
-  print(format('Álcool','=^49'))
+  print(format('Álcool (R$1,90/L)','=^49'))
   print('|',format('até 20 litros','^18'),'|','3% de desconto por litro','|')
   print('|', format('acima de 20 litros','^18'),'|', '5% de desconto por litro','|')
   print(format('=','=^49'))
-  print(format('Gasolina','=^49'))
+  print(format('Gasolina (R$2,50/L)','=^49'))
   print('|',format('até 20 litros','^18'),'|','4% de desconto por litro','|')
   print('|', format('acima de 20 litros','^18'),'|', '6% de desconto por litro','|')
+  print(format('Diesel (R$3,45/L)','=^49'))
+  print('|',format('até 20 litros','^18'),'|','5% de desconto por litro','|')
+  print('|', format('acima de 20 litros','^18'),'|', '7% de desconto por litro','|')
   print(format('=','=^49'))
 
 tabela_precos()
