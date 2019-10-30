@@ -66,8 +66,20 @@ def criar_conta(nome,senha):
   conexao.close()
   return dados_conta
     
-
-#def modificar_conta(conta,nome,senha):
+#funcao para modificar saldo da conta
+def modificar_saldo(dados,modo, valor):
+ 
+  saldo_novo = float(dados[0][3])
+  if modo:
+    saldo_novo += float(valor)
+  else:
+    saldo_novo -= float(valor)
+  dados_usuario = (saldo_novo,dados[0][0])
+  conexao = sqlite3.connect(acesso_tabela_contas("contas_bancarias.db","simulacao_banco"))
+  navegar_manipular = conexao.cursor()
+  navegar_manipular.execute("""UPDATE clientes SET saldo = (?) WHERE conta=(?)""",dados_usuario)
+  conexao.commit()
+  conexao.close()
 
 
 #funcao para criar a tabela para a base de dados

@@ -10,9 +10,9 @@ def linha_estetica():
   print()
   print("="*30)
 
-def encerrar(sessao="SESSAO"):
+def encerrar(sessao=""):
   print()
-  print("="*15+sessao+" ENCERRADA"+"="*15)
+  print("="*15+"SESSAO DE "+sessao+" ENCERRADA"+"="*15)
 
 def opcoes_conta():
   print()
@@ -32,34 +32,44 @@ def conta_criada_com_sucesso():
   print()
   print("=========CONTA CRIADA COM SUCESSO=========")
 
-def acessar_caixa():
-  Total = 50000
+def acessar_caixa(usuario):
+  Total = 5000
   while True:
+      cancelar_saque = False
       if Total < 5:
-          print('\nAcabaram as cédulas desta máquina')
+          print('\nAcabaram as cedulas desta maquina')
           break
       while True:
-          print('\n' + 'BANCO PYTHON')
-          while True:
-              senha = str(input('Digite a senha de 8 dígitos: ')).strip()
-              if len(senha) == 8:
-                  break
-              print('Senha incorreta')
-          valor = str(input('\nMínimo: R$ 5,00.\nValor para sacar(Não é possível sacar moedas): R$ ')).strip()
-
-
-          if valor.count(',') >= 1:
-              print('Digite o valor sem vírgula ou ponto, por favor.')
-          elif valor.count('.') >= 1:
-              print('Digite o valor sem vírgula ou ponto, por favor.')
-          elif int(valor) < 5:
-              print('O mínimo para saque é R$ 5,00.')
-          else:
-              if int(valor) <= Total:
-                  print('Este valor está disponível para saque nesta máquina.')
-                  break
+          nome_banco()
+          # while True:
+          #     senha = str(input('Digite a senha de 8 dígitos: ')).strip()
+          #     if len(senha) == 8:
+          #         break
+          #     print('Senha incorreta')
+          print("Para cancelar o saque nao preencha com o valor")
+          valor = str(input('\nValor Minimo Permitido para Sacar: R$ 5,00.\nValor para sacar(Nao possivel sacar moedas): R$ ')).strip()
+          if (valor.isnumeric()):
+            if valor.count(',') >= 1:
+                print('Digite o valor sem virgula ou ponto, por favor.')
+            elif valor.count('.') >= 1:
+                print('Digite o valor sem virgula ou ponto, por favor.')
+            elif int(valor) < 5:
+                print('O minimo para saque e R$ 5,00.')
+            else:
+              if int(valor) <= float(usuario[0][3]):
+                if int(valor) <= Total:
+                    print('Este valor esta disponivel para saque nesta maquina.')
+                    break
+                else:
+                    print('Este valor nao esta disponivel para saque nesta maquina.')
               else:
-                  print('Este valor não está disponível para saque nesta máquina.')
+                print("Este valor nao pode ser sacado")
+          else:
+            cancelar_saque = True
+            break
+      if cancelar_saque:
+        encerrar("SAQUE")
+        break
 
       valor = int(valor)
       valorR = valor
@@ -114,6 +124,7 @@ def acessar_caixa():
               print('PROCESSO FINALIZADO.')
               break
       else:
+          acessar_contas.modificar_saldo(usuario,False,valorR)
           print('Processando notas', end='')
           Total -= valorR
           for v in range(1, 4):
@@ -221,8 +232,10 @@ def interface_principal():
         opcoes_acesso(dados_usuario[0][0],dados_usuario[0][1])
         opcao2 = str(input("Opcao escolhida: ")).strip()
         if (opcao2 == '0'):
-          break
+          print()
+          print("SALDO ATUAL: R${:.2f}".format(dados_usuario[0][3]))
         elif (opcao2 == '1'):
+          acessar_caixa(dados_usuario)
           break
         elif (opcao2 == '2'):
           break
@@ -241,11 +254,10 @@ def interface_principal():
     else:
       resposta_encerrar = str(input("Encerrar Sessao[S/N]?")).strip().upper()
       if (resposta_encerrar == 'S'):
-        encerrar()
+        encerrar("BANCO")
         break
       else:
         continue
-
 
 
 
