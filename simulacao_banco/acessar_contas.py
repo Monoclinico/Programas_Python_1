@@ -42,6 +42,18 @@ def retornar_conta(conta,senha):
   conexao.close()
   return conta_e_existencia
 
+def retornar_conta_e_nome(conta):
+  conta_e_existencia = None
+  conta_pessoa = str(conta).strip()
+
+  conexao = sqlite3.connect(acesso_tabela_contas("contas_bancarias.db","simulacao_banco"))
+  navegar_manipular = conexao.cursor()
+  navegar_manipular.execute("""SELECT conta, nome, senha, saldo FROM clientes WHERE conta = (?)""",(conta_pessoa,))
+  
+  conta_e_existencia = navegar_manipular.fetchall()
+  conexao.close()
+  return conta_e_existencia
+  
 #funcao que cria a conta bancaria
 def criar_conta(nome,senha):
   

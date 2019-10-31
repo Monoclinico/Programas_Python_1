@@ -24,13 +24,75 @@ def opcoes_acesso(numero_conta, nome_pessoa):
   print("NOME: "+nome_pessoa)
   print("CONTA: "+ numero_conta)
   print("MOSTRAR SALDO [0] =============== [1] SACAR")
-  print("    DEPOSITAR [2] =============== [3] TRANSFERIR PARA OUTRA CONTA")
+  print("    DEPOSITAR [2] =============== [3] TRANSFERIR")
   print("       VOLTAR [4] =============== [5] SAIR")
   print()
 
 def conta_criada_com_sucesso():
   print()
   print("=========CONTA CRIADA COM SUCESSO=========")
+
+def deposito_realizado_com_sucesso():
+  print()
+  print("=========DEPOSITO REALIZADO COM SUCESSO=========")
+
+#interface para acessar o saque
+def acessar_deposito(usuario):
+  VALOR_MAX = 50000
+  valor = 0
+  while True:
+    nome_banco()
+    valor = 0
+    print("Para cancelar o deposito nao preencha com o valor")
+    valor = str(input('\nValor Minimo Permitido para depositar: R$ 5,00.\nValor para depositar(Nao possivel depositar moedas): R$ ')).strip()
+    if (valor.isnumeric()):
+      if valor.count(',') >= 1:
+          print('Digite o valor sem virgula ou ponto, por favor.')
+      elif valor.count('.') >= 1:
+          print('Digite o valor sem virgula ou ponto, por favor.')
+      elif int(valor) < 5:
+          print('O minimo para deposito e R$ 5,00.')
+      else:
+        if (int(valor) <= VALOR_MAX):
+            print('Este valor pode ser depositado nesta maquina.')
+            break
+        else:
+            print('Este valor nao pode ser depositado nesta maquina.')
+    else:
+      break
+  acessar_contas.modificar_saldo(usuario,True,valor)  
+  deposito_realizado_com_sucesso()
+
+def acessar_transferencia(usuario):
+  VALOR_MAX = 50000
+  conta_pessoa = None
+  valor = 0
+  while True:
+    nome_banco()
+    valor = 0
+    print("Para cancelar a transferencia nao preencha com o valor")
+    conta_pessoa = str(input('\nNumero da Conta que recebera o valor: ')).strip()
+    dados_destino = acessar_contas.retornar_conta_e_nome(conta_pessoa)
+    print('Nome: '+dados_destino[0][1]+ ' Conta: '+dados_destino[0][0])
+    valor = str(input('\nValor Minimo Permitido para transferir: R$ 5,00.\nValor para transferir: R$ ')).strip()
+    if (valor.isnumeric()):
+      if valor.count(',') >= 1:
+          print('Digite o valor sem virgula ou ponto, por favor.')
+      elif valor.count('.') > 1:
+          print('Digite o valor so com um ponto, por favor.')
+      elif float(valor) < 10:
+          print('O minimo para transferir e R$ 10,00.')
+      else:
+        if (float(valor) <= VALOR_MAX):
+            print('Este valor pode ser transferido.')
+            break
+        else:
+            print('Este valor nao pode ser transferido.')
+    else:
+      break
+
+  acessar_contas.modificar_saldo(usuario,False,valor)  
+  acessar_contas.modificar_saldo(dados_destino,True,valor)
 
 def acessar_caixa(usuario):
   Total = 5000
@@ -41,11 +103,7 @@ def acessar_caixa(usuario):
           break
       while True:
           nome_banco()
-          # while True:
-          #     senha = str(input('Digite a senha de 8 dígitos: ')).strip()
-          #     if len(senha) == 8:
-          #         break
-          #     print('Senha incorreta')
+
           print("Para cancelar o saque nao preencha com o valor")
           valor = str(input('\nValor Minimo Permitido para Sacar: R$ 5,00.\nValor para sacar(Nao possivel sacar moedas): R$ ')).strip()
           if (valor.isnumeric()):
@@ -238,8 +296,10 @@ def interface_principal():
           acessar_caixa(dados_usuario)
           break
         elif (opcao2 == '2'):
+          acessar_deposito(dados_usuario)
           break
         elif (opcao2 == '3'):
+          acessar_transferencia(dados_usuario)
           break
         elif (opcao2 == '4'):
           break
