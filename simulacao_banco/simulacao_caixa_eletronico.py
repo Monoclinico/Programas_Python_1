@@ -17,7 +17,7 @@ def nome_banco():
   linha_estetica(False,False)
 
 #imprime a mensagem de alguma sessao encerrada
-def encerrar(sessao=""):
+def encerrar(sessao="BANCO"):
   print()
   print(format("SESSAO DE "+sessao+" ENCERRADA","=^60"))
 
@@ -45,11 +45,14 @@ def conta_criada_com_sucesso():
   print()
   print(format("CONTA CRIADA COM SUCESSO","=^60"))
 
-def deposito_realizado_com_sucesso():
+def rotina_realizada_com_sucesso(rotina="ROTINA"):
   print()
-  print(format("DEPOSITO REALIZADO COM SUCESSO","=^60"))
+  if (rotina[-1] == 'O'):
+    print(format(rotina+" REALIZADO COM SUCESSO","=^60"))
+  else:
+    print(format(rotina+" REALIZADA COM SUCESSO","=^60"))
 
-#interface para acessar o saque
+#interface para acessar o deposito na conta
 def acessar_deposito(usuario):
   VALOR_MAX = 50000
   VALOR_MIN = 5
@@ -57,48 +60,63 @@ def acessar_deposito(usuario):
   while True:
     nome_banco()
     valor = 0
-    print("-> Valor minimo para depositar: R$ 5,00.")
-    print("-> Valor maximo para depositar: R$ 50.000,00")
+    print("-> Valor minimo para depositar: R$ {0},00.".format(VALOR_MIN))
+    print("-> Valor maximo para depositar: R$ {0},00.".format(VALOR_MAX))
     print("-> Nao possivel depositar moedas.")
     valor = str(input('VALOR PARA DEPOSITAR: R$')).strip()
     if ((valor.isnumeric()) and (valor.count(" ") <1)):
       if valor.count(',') >= 1:
           print('-> Digite o valor sem virgula ou ponto, por favor.')
+          resposta_deposito_cancelar1 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+          if (resposta_deposito_cancelar1 == 'S'):
+            continue
+          else:  
+            break
       elif valor.count('.') >= 1:
           print('-> Digite o valor sem virgula ou ponto, por favor.')
+          resposta_deposito_cancelar2 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+          if (resposta_deposito_cancelar2 == 'S'):
+            continue
+          else:  
+            break
       elif int(valor) < VALOR_MIN:
-          print('-> O minimo para deposito e R$ 5,00.')
+          print('-> O minimo para deposito e R$ {0},00.'.format(VALOR_MIN))
+          resposta_deposito_cancelar3 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+          if (resposta_deposito_cancelar3 == 'S'):
+            continue
+          else:  
+            break
       else:
         if (int(valor) <= VALOR_MAX):
             print('-> Este valor pode ser depositado nesta maquina.')
             resposta_deposito = str(input("CONFIRMAR DEPOSITO[S/N]? ")).strip().upper()
             if (resposta_deposito == 'S'):
               acessar_contas.modificar_saldo(usuario,True,valor)  
-              deposito_realizado_com_sucesso()
+              rotina_realizada_com_sucesso("DEPOSITO")
               break
             else:
-              resposta_deposito_cancelar1 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
-              if (resposta_deposito_cancelar1 == 'S'):
+              resposta_deposito_cancelar4 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+              if (resposta_deposito_cancelar4 == 'S'):
                 continue
               else:  
                 break
         else:
             print('-> Este valor nao pode ser depositado nesta maquina.')
-            resposta_deposito_cancelar2 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
-            if (resposta_deposito_cancelar2 == 'S'):
+            resposta_deposito_cancelar5 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+            if (resposta_deposito_cancelar5 == 'S'):
               continue
             else:  
               break
     else:
       print("-> Valor invalido.")
-      resposta_deposito_cancelar3 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
-      if (resposta_deposito_cancelar3 == 'S'):
+      resposta_deposito_cancelar6 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+      if (resposta_deposito_cancelar6 == 'S'):
         continue
       else:  
         break
   encerrar("DEPOSITO")    
 
-
+##interface para acessar a tranferencia para outra conta
 def acessar_transferencia(usuario):
   VALOR_MAX = 50000
   conta_pessoa = None
@@ -314,7 +332,7 @@ def interface_principal():
     dados_usuario = None
     
     opcoes_conta()
-    opcao = str(input("Opcao escolhida: ")).strip()
+    opcao = str(input("INFORME A OPCAO: ")).strip()
     if (opcao == '0'):
       interface_criar_conta()
     elif (opcao == '1'):
@@ -323,7 +341,7 @@ def interface_principal():
       dados_usuario = interface_acessar_conta()
       while True:
         opcoes_acesso(dados_usuario[0][0],dados_usuario[0][1],dados_usuario[0][3],escolha_mostrar)
-        opcao2 = str(input("Opcao escolhida: ")).strip()
+        opcao2 = str(input("INFORME A OPCAO: ")).strip()
         linha_estetica(False,False)
         if (opcao2 == '0'):
           escolha_mostrar = True
@@ -347,9 +365,9 @@ def interface_principal():
         encerrar()
         break
     else:
-      resposta_encerrar = str(input("Encerrar Sessao[S/N]?")).strip().upper()
+      resposta_encerrar = str(input("ENCERRAR SESSAO[S/N]?")).strip().upper()
       if (resposta_encerrar == 'S'):
-        encerrar("BANCO")
+        encerrar()
         break
       else:
         continue
