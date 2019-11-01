@@ -2,64 +2,88 @@ from time import sleep
 import datetime
 import acessar_contas
 
+#imprime uma linha formatada
+def linha_estetica(quebra_antes=True,quebra_depois=True):
+  if (quebra_antes):
+    print()
+  print("="*60)
+  if (quebra_depois):
+    print()
+
+#imprime o nome do banco formatado
 def nome_banco():
-  print()
-  print("="*15+"BANCO PYTHON"+"="*15)
+  linha_estetica(True,False)
+  print(format("BANCO PYTHON","=^60"))
+  linha_estetica(False,False)
 
-def linha_estetica():
-  print()
-  print("="*30)
-
+#imprime a mensagem de alguma sessao encerrada
 def encerrar(sessao=""):
   print()
-  print("="*15+"SESSAO DE "+sessao+" ENCERRADA"+"="*15)
+  print(format("SESSAO DE "+sessao+" ENCERRADA","=^60"))
 
+#imprime um painel de opcoes de acesso ao banco 
 def opcoes_conta():
-  print()
-  print("CRIAR CONTA [0] ================= [1] ACESSAR CONTA")
-  print("       SAIR [2] ================= ")
-  print()
-def opcoes_acesso(numero_conta, nome_pessoa):
-  print()
+  nome_banco()
+  print(format("CRIAR CONTA [0] ---- [1] ACESSAR CONTA"," ^60"))
+  print(format("       SAIR [2] ----                  "," ^60"))
+  linha_estetica(False,False)
+
+def opcoes_acesso(numero_conta, nome_pessoa,saldo_pessoa=0,mostrar=False):
+  nome_banco()
   print("NOME: "+nome_pessoa)
   print("CONTA: "+ numero_conta)
-  print("MOSTRAR SALDO [0] =============== [1] SACAR")
-  print("    DEPOSITAR [2] =============== [3] TRANSFERIR")
-  print("       VOLTAR [4] =============== [5] SAIR")
-  print()
+  if (mostrar):
+    print("SALDO: {:.2f}".format(saldo_pessoa))
+  else:
+    print("SALDO: ######")
+  print(format(format("MOSTRAR SALDO [0] ---- [1] SACAR"," ^37")," ^60"))
+  print(format("    DEPOSITAR [2] ---- [3] TRANSFERIR"," ^60"))
+  print(format("       VOLTAR [4] ---- [5] SAIR      "," ^60"))
+  linha_estetica(False,False)
 
 def conta_criada_com_sucesso():
   print()
-  print("=========CONTA CRIADA COM SUCESSO=========")
+  print(format("CONTA CRIADA COM SUCESSO","=^60"))
 
 def deposito_realizado_com_sucesso():
   print()
-  print("=========DEPOSITO REALIZADO COM SUCESSO=========")
+  print(format("DEPOSITO REALIZADO COM SUCESSO","=^60"))
 
 #interface para acessar o saque
 def acessar_deposito(usuario):
   VALOR_MAX = 50000
+  VALOR_MIN = 5
   valor = 0
   while True:
     nome_banco()
     valor = 0
-    print("Para cancelar o deposito nao preencha com o valor")
-    valor = str(input('\nValor Minimo Permitido para depositar: R$ 5,00.\nValor para depositar(Nao possivel depositar moedas): R$ ')).strip()
-    if (valor.isnumeric()):
+    #print("-> Para cancelar o deposito nao preencha com o valor.")
+    print("-> Valor minimo para depositar: R$ 5,00.")
+    print("-> Valor maximo para depositar: R$ 50.000,00")
+    print("-> Nao possivel depositar moedas.")
+    valor = str(input('VALOR PARA DEPOSITAR: R$')).strip()
+    if ((valor.isnumeric()) or (valor.count(" ") <1)):
       if valor.count(',') >= 1:
-          print('Digite o valor sem virgula ou ponto, por favor.')
+          print('-> Digite o valor sem virgula ou ponto, por favor.')
       elif valor.count('.') >= 1:
-          print('Digite o valor sem virgula ou ponto, por favor.')
-      elif int(valor) < 5:
-          print('O minimo para deposito e R$ 5,00.')
+          print('-> Digite o valor sem virgula ou ponto, por favor.')
+      elif int(valor) < VALOR_MIN:
+          print('-> O minimo para deposito e R$ 5,00.')
       else:
         if (int(valor) <= VALOR_MAX):
-            print('Este valor pode ser depositado nesta maquina.')
-            break
+            print('-> Este valor pode ser depositado nesta maquina.')
+            resposta_deposito = str(input("CONFIRMAR DEPOSITO[S/N]? ")).strip().upper()
+            if (resposta_deposito == 'S'):
+              break
         else:
-            print('Este valor nao pode ser depositado nesta maquina.')
+            print('-> Este valor nao pode ser depositado nesta maquina.')
+
     else:
-      break
+      resposta_deposito_cancelar = str(input("CANCELAR DEPOSITO[S/N]? ")).strip().upper()
+      if (resposta_deposito_cancelar == 'S'):
+        valor = 0
+        break
+
   acessar_contas.modificar_saldo(usuario,True,valor)  
   deposito_realizado_com_sucesso()
 
@@ -71,10 +95,10 @@ def acessar_transferencia(usuario):
     nome_banco()
     valor = 0
     print("Para cancelar a transferencia nao preencha com o valor")
-    conta_pessoa = str(input('\nNumero da Conta que recebera o valor: ')).strip()
+    conta_pessoa = str(input('Numero da Conta que recebera o valor: ')).strip()
     dados_destino = acessar_contas.retornar_conta_e_nome(conta_pessoa)
     print('Nome: '+dados_destino[0][1]+ ' Conta: '+dados_destino[0][0])
-    valor = str(input('\nValor Minimo Permitido para transferir: R$ 5,00.\nValor para transferir: R$ ')).strip()
+    valor = str(input('Valor Minimo Permitido para transferir: R$ 5,00.\nValor para transferir: R$ ')).strip()
     if (valor.isnumeric()):
       if valor.count(',') >= 1:
           print('Digite o valor sem virgula ou ponto, por favor.')
@@ -179,7 +203,6 @@ def acessar_caixa(usuario):
       if RE == 'N':
           RE = input('CANCELAR(S/N)? ').strip().upper()
           if RE == 'S':
-              print('PROCESSO FINALIZADO.')
               break
       else:
           acessar_contas.modificar_saldo(usuario,False,valorR)
@@ -190,7 +213,6 @@ def acessar_caixa(usuario):
               print('.', end='')
           print('\nRetire suas notas.')
           sleep(2.3)
-          print('PROCESSO FINALIZADO.')
           print('\nImprimindo extrato',end='')
           for v in range(1, 4):
               sleep(0.8)
@@ -278,20 +300,21 @@ def interface_acessar_conta():
 def interface_principal():
   while True:
     dados_usuario = None
-    nome_banco()
+    
     opcoes_conta()
     opcao = str(input("Opcao escolhida: ")).strip()
     if (opcao == '0'):
       interface_criar_conta()
     elif (opcao == '1'):
       resposta_encerrar2 = False
+      escolha_mostrar = False
       dados_usuario = interface_acessar_conta()
       while True:
-        opcoes_acesso(dados_usuario[0][0],dados_usuario[0][1])
+        opcoes_acesso(dados_usuario[0][0],dados_usuario[0][1],dados_usuario[0][3],escolha_mostrar)
         opcao2 = str(input("Opcao escolhida: ")).strip()
+        linha_estetica(False,False)
         if (opcao2 == '0'):
-          print()
-          print("SALDO ATUAL: R${:.2f}".format(dados_usuario[0][3]))
+          escolha_mostrar = True
         elif (opcao2 == '1'):
           acessar_caixa(dados_usuario)
           break
