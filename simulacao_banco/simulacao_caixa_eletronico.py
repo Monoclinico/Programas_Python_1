@@ -57,12 +57,11 @@ def acessar_deposito(usuario):
   while True:
     nome_banco()
     valor = 0
-    #print("-> Para cancelar o deposito nao preencha com o valor.")
     print("-> Valor minimo para depositar: R$ 5,00.")
     print("-> Valor maximo para depositar: R$ 50.000,00")
     print("-> Nao possivel depositar moedas.")
     valor = str(input('VALOR PARA DEPOSITAR: R$')).strip()
-    if ((valor.isnumeric()) or (valor.count(" ") <1)):
+    if ((valor.isnumeric()) and (valor.count(" ") <1)):
       if valor.count(',') >= 1:
           print('-> Digite o valor sem virgula ou ponto, por favor.')
       elif valor.count('.') >= 1:
@@ -74,18 +73,31 @@ def acessar_deposito(usuario):
             print('-> Este valor pode ser depositado nesta maquina.')
             resposta_deposito = str(input("CONFIRMAR DEPOSITO[S/N]? ")).strip().upper()
             if (resposta_deposito == 'S'):
+              acessar_contas.modificar_saldo(usuario,True,valor)  
+              deposito_realizado_com_sucesso()
               break
+            else:
+              resposta_deposito_cancelar1 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+              if (resposta_deposito_cancelar1 == 'S'):
+                continue
+              else:  
+                break
         else:
             print('-> Este valor nao pode ser depositado nesta maquina.')
-
+            resposta_deposito_cancelar2 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+            if (resposta_deposito_cancelar2 == 'S'):
+              continue
+            else:  
+              break
     else:
-      resposta_deposito_cancelar = str(input("CANCELAR DEPOSITO[S/N]? ")).strip().upper()
-      if (resposta_deposito_cancelar == 'S'):
-        valor = 0
+      print("-> Valor invalido.")
+      resposta_deposito_cancelar3 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+      if (resposta_deposito_cancelar3 == 'S'):
+        continue
+      else:  
         break
+  encerrar("DEPOSITO")    
 
-  acessar_contas.modificar_saldo(usuario,True,valor)  
-  deposito_realizado_com_sucesso()
 
 def acessar_transferencia(usuario):
   VALOR_MAX = 50000
