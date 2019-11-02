@@ -236,7 +236,7 @@ def acessar_transferencia(usuario):
 
 #funcao que cria a interface para sacar o valor
 def acessar_caixa(usuario):
-  Total = 5000
+  Total = 10000
   VALOR_MIN = 5
   while (True):
       cancelar_saque = False
