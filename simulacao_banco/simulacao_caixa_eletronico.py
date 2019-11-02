@@ -28,23 +28,26 @@ def opcoes_conta():
   print(format("       SAIR [2] ----                  "," ^60"))
   linha_estetica(False,False)
 
+#imprime um painel de opcoes da conta
 def opcoes_acesso(numero_conta, nome_pessoa,saldo_pessoa=0,mostrar=False):
   nome_banco()
   print("NOME: "+nome_pessoa)
   print("CONTA: "+ numero_conta)
   if (mostrar):
-    print("SALDO: {:.2f}".format(saldo_pessoa))
+    print("SALDO: R$ {:.2f}".format(saldo_pessoa))
   else:
-    print("SALDO: ######")
-  print(format(format("MOSTRAR SALDO [0] ---- [1] SACAR"," ^37")," ^60"))
+    print("SALDO: R$ ######")
+  print(format("MOSTRAR SALDO [0] ---- [1] SACAR     "," ^60"))
   print(format("    DEPOSITAR [2] ---- [3] TRANSFERIR"," ^60"))
   print(format("       VOLTAR [4] ---- [5] SAIR      "," ^60"))
   linha_estetica(False,False)
 
+#imprime uma mensagem quando uma conta for criada
 def conta_criada_com_sucesso():
   print()
   print(format("CONTA CRIADA COM SUCESSO","=^60"))
 
+#imprime uma mensagem quando alguma rotina for feita sem problemas
 def rotina_realizada_com_sucesso(rotina="ROTINA"):
   print()
   if (rotina[-1] == 'O'):
@@ -52,12 +55,34 @@ def rotina_realizada_com_sucesso(rotina="ROTINA"):
   else:
     print(format(rotina+" REALIZADA COM SUCESSO","=^60"))
 
+#funcao para validar o formato da senha
+def validar_formato_senha(senha):
+  senha_temporaria = str(senha)
+  if (len(senha_temporaria) == 8) and (senha_temporaria.count(" ") < 1):
+    for c in range(0,len(senha_temporaria)):
+      if not(senha_temporaria[c].isnumeric()):
+        return False
+    return True
+  else:
+    return False
+
+#funcao para validar o formato da conta
+def validar_formato_conta(conta):
+  conta_temporaria = str(conta)
+  if (len(conta_temporaria) == 4) and (conta_temporaria.count(" ") < 1):
+    for c in range(0,len(conta_temporaria)):
+      if not(conta_temporaria[c].isnumeric()):
+        return False
+    return True
+  else:
+    return False
+
 #interface para acessar o deposito na conta
 def acessar_deposito(usuario):
   VALOR_MAX = 50000
   VALOR_MIN = 5
   valor = 0
-  while True:
+  while (True):
     nome_banco()
     valor = 0
     print("-> Valor minimo para depositar: R$ {0},00.".format(VALOR_MIN))
@@ -116,12 +141,14 @@ def acessar_deposito(usuario):
         break
   encerrar("DEPOSITO")    
 
-##interface para acessar a tranferencia para outra conta
+#TODO Arrumar funcao de transferencia de valores
+#interface para acessar a transferencia para outra conta
 def acessar_transferencia(usuario):
   VALOR_MAX = 50000
+  VALOR_MIN = 10
   conta_pessoa = None
   valor = 0
-  while True:
+  while (True):
     nome_banco()
     valor = 0
     print("Para cancelar a transferencia nao preencha com o valor")
@@ -148,9 +175,11 @@ def acessar_transferencia(usuario):
   acessar_contas.modificar_saldo(usuario,False,valor)  
   acessar_contas.modificar_saldo(dados_destino,True,valor)
 
+#TODO Arrumar funcao de sacar valor 
+#funcao que cria a interface para sacar o valor
 def acessar_caixa(usuario):
   Total = 5000
-  while True:
+  while (True):
       cancelar_saque = False
       if Total < 5:
           print('\nAcabaram as cedulas desta maquina')
@@ -255,6 +284,7 @@ def acessar_caixa(usuario):
                     datetime.datetime.today().hour,datetime.datetime.today().minute, valorR))
           break
 
+#TODO Arrumar funcao de criar
 # interface para criar a conta no banco
 def interface_criar_conta():
   sair = "S"
@@ -287,7 +317,7 @@ def interface_criar_conta():
     if ((senha1 == senha2) and (len(senha1) > 0) and (len(senha2) > 0) and (len(senha1) == 8)):
       break
     else:
-      print("Informe a senha corretamente")
+      print("Informe a senha corretamente.")
       continue
 
   if (sair == 'N'):
@@ -299,79 +329,92 @@ def interface_criar_conta():
 
 #interface para acessar a conta no banco
 def interface_acessar_conta():
-  sair = "S"
-  dados_conta = None
+  dados_conta = []
   while (True):
+    dados_conta = []
     nome_banco()
-    sair = str(input("Deseja acessar sua conta[S/N]? ")).strip().upper()
-    if (sair == 'N'):
-      break
-
-    conta = str(input("Informe o numero da sua conta: "))
-    conta = conta.strip().lower().title()
-
-    senha = str(input("Informe sua senha de 8 digitos: "))
-    senha = senha.strip()
-
-    if ((len(conta) >0) and (len(senha) == 8)):
-      dados_conta = acessar_contas.retornar_conta(conta,senha)
-      if (len(dados_conta) != 0):
-        return dados_conta
-      else:
-        continue
-    else:
-      print("Informe os dados corretos")
-      continue
-
-  if (sair == 'N'):
-    return []
-    
-
-def interface_principal():
-  while True:
-    dados_usuario = None
-    
-    opcoes_conta()
-    opcao = str(input("INFORME A OPCAO: ")).strip()
-    if (opcao == '0'):
-      interface_criar_conta()
-    elif (opcao == '1'):
-      resposta_encerrar2 = False
-      escolha_mostrar = False
-      dados_usuario = interface_acessar_conta()
-      while True:
-        opcoes_acesso(dados_usuario[0][0],dados_usuario[0][1],dados_usuario[0][3],escolha_mostrar)
-        opcao2 = str(input("INFORME A OPCAO: ")).strip()
-        linha_estetica(False,False)
-        if (opcao2 == '0'):
-          escolha_mostrar = True
-        elif (opcao2 == '1'):
-          acessar_caixa(dados_usuario)
-          break
-        elif (opcao2 == '2'):
-          acessar_deposito(dados_usuario)
-          break
-        elif (opcao2 == '3'):
-          acessar_transferencia(dados_usuario)
-          break
-        elif (opcao2 == '4'):
-          break
-        elif (opcao2 == '5'):
-          resposta_encerrar2 = True
+    sair = str(input("DESEJA ACESSAR A CONTA[S/N]? ")).strip().upper()
+    if (sair == 'S'):
+      conta = str(input("INFORME O NUMERO DA CONTA: "))
+      senha = str(input("INFORMA A SENHA DE 8 DIGITOS: "))
+      if (validar_formato_conta(conta)) and (validar_formato_senha(senha)):
+        dados_conta = acessar_contas.retornar_conta(conta,senha)
+        if (len(dados_conta) > 0):
           break
         else:
+          print("-> A conta ou a senha esta incorreta.")
+          resposta_deposito_cancelar1 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+          if (resposta_deposito_cancelar1 == 'S'):
+            continue
+          else:  
+            break
+      else:
+        print("-> Formato da conta ou da senha invalido.")
+        resposta_deposito_cancelar2 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+        if (resposta_deposito_cancelar2 == 'S'):
           continue
-      if resposta_encerrar2:
-        encerrar()
-        break
+        else:  
+          break
     else:
-      resposta_encerrar = str(input("ENCERRAR SESSAO[S/N]?")).strip().upper()
-      if (resposta_encerrar == 'S'):
-        encerrar()
-        break
+      break
+  return dados_conta
+    
+#funcao que cria a interface principal
+def interface_principal():
+  while (True):
+    dados_usuario = []
+    opcoes_conta()
+    opcao1 = str(input("INFORME A OPCAO: ")).strip()
+    if (opcao1 == '0'):
+      interface_criar_conta()
+    elif (opcao1 == '1'):
+      encerrar_interface = False
+      escolha_mostrar = False
+      dados_usuario = interface_acessar_conta()
+      if (len(dados_usuario) >0):
+        while (True):
+          encerrar_interface = False
+          opcoes_acesso(dados_usuario[0][0],dados_usuario[0][1],dados_usuario[0][3],escolha_mostrar)
+          opcao2 = str(input("INFORME A OPCAO: ")).strip()
+          if (opcao2 == '0'):
+            escolha_mostrar = True
+          elif (opcao2 == '1'):
+            acessar_caixa(dados_usuario)
+            break
+          elif (opcao2 == '2'):
+            acessar_deposito(dados_usuario)
+            break
+          elif (opcao2 == '3'):
+            acessar_transferencia(dados_usuario)
+            break
+          elif (opcao2 == '4'):
+            break
+          elif (opcao2 == '5'):
+            resposta_encerrar1 = str(input("ENCERRAR SESSAO[S/N]?")).strip().upper()
+            if (resposta_encerrar1 == 'N'):
+              continue
+            else:
+              encerrar_interface = True
+              break
+          else:
+            resposta_encerrar2 = str(input("ENCERRAR SESSAO[S/N]?")).strip().upper()
+            if (resposta_encerrar2 == 'N'):
+              continue
+            else:
+              encerrar_interface = True
+              break
+        if encerrar_interface:
+          encerrar()
+          break
       else:
         continue
+    else:
+      resposta_encerrar3 = str(input("ENCERRAR SESSAO[S/N]?")).strip().upper()
+      if (resposta_encerrar3 == 'N'):
+        continue
+      else:
+        encerrar()
+        break
 
-
-
-interface_principal()
+if __name__ == "__main__":
+  interface_principal()
