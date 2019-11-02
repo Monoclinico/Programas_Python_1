@@ -42,10 +42,11 @@ def opcoes_acesso(numero_conta, nome_pessoa,saldo_pessoa=0,mostrar=False):
   print(format("       VOLTAR [4] ---- [5] SAIR      "," ^60"))
   linha_estetica(False,False)
 
-#imprime uma mensagem quando uma conta for criada
-def conta_criada_com_sucesso():
-  print()
-  print(format("CONTA CRIADA COM SUCESSO","=^60"))
+#imprime as informacoes de uma conta criada
+def informacoes_conta(numero_conta,nome_pessoa):
+  print("NOME: "+nome_pessoa)
+  print("CONTA: "+numero_conta)
+  linha_estetica(False,False)
 
 #imprime uma mensagem quando alguma rotina for feita sem problemas
 def rotina_realizada_com_sucesso(rotina="ROTINA"):
@@ -284,48 +285,47 @@ def acessar_caixa(usuario):
                     datetime.datetime.today().hour,datetime.datetime.today().minute, valorR))
           break
 
-#TODO Arrumar funcao de criar
 # interface para criar a conta no banco
 def interface_criar_conta():
-  sair = "S"
+  
   while (True):
     nome_banco()
-    sair = str(input("Deseja criar uma conta[S/N]? ")).strip().upper()
-    if (sair == 'N'):
-      break
+    nome_definido = ""
+    senha_definida = ""
+    sair1 = str(input("DESEJA CRIAR UMA CONTA[S/N]? ")).strip().upper()
+    if (sair1 == 'S'):
+      nome = str(input("INFORME SEU NOME: "))
+      nome = nome.strip()
+      senha1 = str(input("CRIE UMA SENHA COM 8 DIGITOS: "))
+      senha2 = str(input("REPITA A SENHA CRIADA: "))
 
-    nome_completo = str(input("Informe seu nome completo: "))
-    nome_completo = nome_completo.strip().lower().title()
-    if (len(nome_completo) >0):
-      break
+      if (len(nome) >0):
+        nome_definido = nome.lower().title()
+        if (validar_formato_senha(senha1) and validar_formato_senha(senha2)):
+          if (senha1 == senha2):
+            senha_definida = senha2
+            sair2 = str(input("CONFIRMAR A CRIACAO DA CONTA[S/N]? ")).strip().upper()
+            if (sair2 == 'S'):
+              dados_temporarios = acessar_contas.criar_conta(nome_definido,senha_definida)
+              rotina_realizada_com_sucesso("CRIACAO DA CONTA")
+              informacoes_conta(dados_temporarios[0][0],dados_temporarios[0][1])
+              break
+            else:
+              break
+          else:
+            print("-> As senhas nao sao iguais.")
+            continue
+        else:
+          print("-> O formato da senha esta incorreto.")
+          continue
+      else:
+        print("-> Informe o nome corretamente.")
+        continue
     else:
-      print("Informe o nome corretamente")
-      continue
-  if (sair == 'N'):
-    encerrar("CRIACAO DE CONTA")
-    return
-
-  while (True):
-    sair = str(input("Continuar com a criacao da conta[S/N]? ")).strip().upper()
-    if (sair == 'N'):
       break
+  encerrar("CRIACAO")
+ 
 
-    senha1 = str(input("Crie uma senha de 8 digitos: "))
-    senha1 = senha1.strip()
-    senha2 = str(input("Repita a senha criada: "))
-    senha2 = senha2.strip()
-    if ((senha1 == senha2) and (len(senha1) > 0) and (len(senha2) > 0) and (len(senha1) == 8)):
-      break
-    else:
-      print("Informe a senha corretamente.")
-      continue
-
-  if (sair == 'N'):
-    encerrar("CRIACAO DE CONTA")
-    return
-
-  print(acessar_contas.criar_conta(nome_completo,senha2))
-  conta_criada_com_sucesso()
 
 #interface para acessar a conta no banco
 def interface_acessar_conta():
