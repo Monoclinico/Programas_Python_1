@@ -53,6 +53,8 @@ def rotina_realizada_com_sucesso(rotina="ROTINA"):
   print()
   if (rotina[-1] == 'O'):
     print(format(rotina+" REALIZADO COM SUCESSO","=^60"))
+  elif (rotina[-1] == 'E'):
+    print(format(rotina+" REALIZADO COM SUCESSO","=^60"))
   else:
     print(format(rotina+" REALIZADA COM SUCESSO","=^60"))
 
@@ -232,41 +234,61 @@ def acessar_transferencia(usuario):
   encerrar("TRANSFERENCIA")
 
 
-#TODO Arrumar funcao de sacar valor 
 #funcao que cria a interface para sacar o valor
 def acessar_caixa(usuario):
   Total = 5000
+  VALOR_MIN = 5
   while (True):
       cancelar_saque = False
       if Total < 5:
-          print('\nAcabaram as cedulas desta maquina')
+          print('-> Acabaram as cedulas desta maquina.')
           break
       while True:
+          cancelar_saque = False
           nome_banco()
-
-          print("Para cancelar o saque nao preencha com o valor")
-          valor = str(input('\nValor Minimo Permitido para Sacar: R$ 5,00.\nValor para sacar(Nao possivel sacar moedas): R$ ')).strip()
+          print("-> Valor minimo para sacar: R$ {},00".format(VALOR_MIN))
+          print("-> Nao e possivel sacar moedas.")
+          valor = str(input('VALOR PARA SACAR: R$ ')).strip()
           if (valor.isnumeric()):
-            if valor.count(',') >= 1:
-                print('Digite o valor sem virgula ou ponto, por favor.')
-            elif valor.count('.') >= 1:
-                print('Digite o valor sem virgula ou ponto, por favor.')
-            elif int(valor) < 5:
-                print('O minimo para saque e R$ 5,00.')
+            if int(valor) < VALOR_MIN:
+                print('-> O minimo para saque e R$ {},00.'.format(VALOR_MIN))
+                resposta_saque_cancelar1 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+                if (resposta_saque_cancelar1 == 'S'):
+                  continue
+                else:  
+                  cancelar_saque = True
+                  break
             else:
               if int(valor) <= float(usuario[0][3]):
                 if int(valor) <= Total:
-                    print('Este valor esta disponivel para saque nesta maquina.')
+                    print("-> Este valor esta disponivel para saque nesta maquina.")
+                    linha_estetica(False,False)
                     break
                 else:
-                    print('Este valor nao esta disponivel para saque nesta maquina.')
+                    print("-> Este valor nao esta disponivel para saque nesta maquina.")
+                    resposta_saque_cancelar2 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+                    if (resposta_saque_cancelar2 == 'S'):
+                      continue
+                    else:  
+                      cancelar_saque = True
+                      break
               else:
-                print("Este valor nao pode ser sacado")
+                print("-> Este valor nao pode ser sacado.")
+                resposta_saque_cancelar3 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+                if (resposta_saque_cancelar3 == 'S'):
+                  continue
+                else:  
+                  cancelar_saque = True
+                  break
           else:
-            cancelar_saque = True
-            break
+            print("-> Valor e invalido para sacar.")
+            resposta_saque_cancelar4 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+            if (resposta_saque_cancelar4 == 'S'):
+              continue
+            else:  
+              cancelar_saque = True
+              break
       if cancelar_saque:
-        encerrar("SAQUE")
         break
 
       valor = int(valor)
@@ -314,32 +336,38 @@ def acessar_caixa(usuario):
             valor = valor % 2
             print('{} nota(s) de R$ 2,00'.format(nota2))
 
-      print('TOTAL = R$ {}'.format(valorR))
-      RE = input('\nCONFIRMAR SAQUE(S/N)? ').strip().upper()
-      if RE == 'N':
-          RE = input('CANCELAR(S/N)? ').strip().upper()
-          if RE == 'S':
-              break
+      print('TOTAL = R$ {},00'.format(valorR))
+      linha_estetica(False,False)
+      confirmar_saque = input('CONFIRMAR SAQUE(S/N)? ').strip().upper()
+      if confirmar_saque == 'S':
+        acessar_contas.modificar_saldo(usuario,False,valorR)
+        print('Processando notas', end='')
+        Total -= valorR
+        for v in range(1, 4):
+            sleep(0.8)
+            print('.', end='')
+        print('\nRetire suas notas.')
+        sleep(2.3)
+        print('\nImprimindo extrato',end='')
+        for v in range(1, 4):
+            sleep(0.8)
+            print('.', end='')
+        print('\n')
+        print('EXTRATO BANCO PYTHON')
+        print('Data: {}/{}/{} \nHorário: {}h e {}min' 
+          '\nTotal: R$ {},00'.format(datetime.date.today().day,
+                  datetime.date.today().month, datetime.date.today().year,
+                  datetime.datetime.today().hour,datetime.datetime.today().minute, valorR))
+        rotina_realizada_com_sucesso("SAQUE")
+        break
       else:
-          acessar_contas.modificar_saldo(usuario,False,valorR)
-          print('Processando notas', end='')
-          Total -= valorR
-          for v in range(1, 4):
-              sleep(0.8)
-              print('.', end='')
-          print('\nRetire suas notas.')
-          sleep(2.3)
-          print('\nImprimindo extrato',end='')
-          for v in range(1, 4):
-              sleep(0.8)
-              print('.', end='')
-          print('\n')
-          print('EXTRATO BANCO PYTHON')
-          print('Data: {}/{}/{} \nHorário: {}h e {}min' 
-  '\nTotal: R$ {},00'.format(datetime.date.today().day,
-                    datetime.date.today().month, datetime.date.today().year,
-                    datetime.datetime.today().hour,datetime.datetime.today().minute, valorR))
+        resposta_saque_cancelar5 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+        if (resposta_saque_cancelar5 == 'S'):
+          continue
+        else:  
           break
+
+  encerrar("SAQUE")
 
 # interface para criar a conta no banco
 def interface_criar_conta():
@@ -381,7 +409,6 @@ def interface_criar_conta():
       break
   encerrar("CRIACAO")
  
-
 
 #interface para acessar a conta no banco
 def interface_acessar_conta():
