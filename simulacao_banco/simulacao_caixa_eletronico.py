@@ -142,39 +142,95 @@ def acessar_deposito(usuario):
         break
   encerrar("DEPOSITO")    
 
-#TODO Arrumar funcao de transferencia de valores
+
 #interface para acessar a transferencia para outra conta
 def acessar_transferencia(usuario):
   VALOR_MAX = 50000
   VALOR_MIN = 10
-  conta_pessoa = None
-  valor = 0
   while (True):
     nome_banco()
     valor = 0
-    print("Para cancelar a transferencia nao preencha com o valor")
-    conta_pessoa = str(input('Numero da Conta que recebera o valor: ')).strip()
-    dados_destino = acessar_contas.retornar_conta_e_nome(conta_pessoa)
-    print('Nome: '+dados_destino[0][1]+ ' Conta: '+dados_destino[0][0])
-    valor = str(input('Valor Minimo Permitido para transferir: R$ 5,00.\nValor para transferir: R$ ')).strip()
-    if (valor.isnumeric()):
-      if valor.count(',') >= 1:
-          print('Digite o valor sem virgula ou ponto, por favor.')
-      elif valor.count('.') > 1:
-          print('Digite o valor so com um ponto, por favor.')
-      elif float(valor) < 10:
-          print('O minimo para transferir e R$ 10,00.')
-      else:
-        if (float(valor) <= VALOR_MAX):
-            print('Este valor pode ser transferido.')
-            break
+    valor_sem_ponto = ""
+    conta_pessoa = 0
+    print("-> Valor minimo para transferir: R$ {0},00.".format(VALOR_MIN))
+    print("-> Valor maximo para transferir: R$ {0},00.".format(VALOR_MAX))
+    conta_pessoa = str(input('NUMERO DA CONTA QUE RECEBE O VALOR: ')).strip()
+    if validar_formato_conta(conta_pessoa):
+      dados_destino = acessar_contas.retornar_conta_e_nome(conta_pessoa)
+      if (len(dados_destino[0]) > 0):
+        informacoes_conta(dados_destino[0][0],dados_destino[0][1])
+        valor = str(input('VALOR PARA TRANSFERIR: R$ ')).strip()
+        if (valor.count(".") > 0):
+          valor_sem_ponto = valor.replace(".","")
         else:
-            print('Este valor nao pode ser transferido.')
+          valor_sem_ponto = valor
+        if (valor_sem_ponto.isnumeric()):
+          if valor.count(',') >= 1:
+              print('-> Digite o valor sem virgula, por favor.')
+              resposta_deposito_cancelar1 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+              if (resposta_deposito_cancelar1 == 'S'):
+                continue
+              else:  
+                break
+          elif valor.count('.') > 1:
+              print('-> Digite o valor so com um ponto, por favor.')
+              resposta_deposito_cancelar2 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+              if (resposta_deposito_cancelar2 == 'S'):
+                continue
+              else:  
+                break
+          elif float(valor) < VALOR_MIN:
+              print("-> O minimo para transferir e R$ {},00.".format(VALOR_MIN))
+              resposta_deposito_cancelar3 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+              if (resposta_deposito_cancelar3 == 'S'):
+                continue
+              else:  
+                break
+          else:
+            if (float(valor) <= VALOR_MAX):
+                print('-> Este valor pode ser transferido.')
+                resposta_transferencia = str(input("CONFIRMAR TRANSFERENCIA[S/N]? ")).strip().upper()
+                if (resposta_transferencia == 'S'):
+                  acessar_contas.modificar_saldo(usuario,False,valor)  
+                  acessar_contas.modificar_saldo(dados_destino,True,valor)
+                  rotina_realizada_com_sucesso("TRANSFERENCIA")
+                  break
+                else:  
+                  resposta_deposito_cancelar4 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+                  if (resposta_deposito_cancelar4 == 'S'):
+                    continue
+                  else:  
+                    break
+            else:
+                print('-> Este valor nao pode ser transferido.')
+                resposta_deposito_cancelar5 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+                if (resposta_deposito_cancelar5 == 'S'):
+                  continue
+                else:  
+                  break
+        else:
+          print("-> Valor invalido.")
+          resposta_deposito_cancelar6 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+          if (resposta_deposito_cancelar6 == 'S'):
+            continue
+          else:  
+            break
+      else:
+        print("-> A conta nao foi encontrada.")
+        resposta_deposito_cancelar7 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+        if (resposta_deposito_cancelar7 == 'S'):
+          continue
+        else:  
+          break
     else:
-      break
+      print("-> O numero da conta esta incorreto.")
+      resposta_deposito_cancelar8 = str(input("TENTAR NOVAMENTE[S/N]? ")).strip().upper()
+      if (resposta_deposito_cancelar8 == 'S'):
+        continue
+      else:  
+        break
+  encerrar("TRANSFERENCIA")
 
-  acessar_contas.modificar_saldo(usuario,False,valor)  
-  acessar_contas.modificar_saldo(dados_destino,True,valor)
 
 #TODO Arrumar funcao de sacar valor 
 #funcao que cria a interface para sacar o valor
