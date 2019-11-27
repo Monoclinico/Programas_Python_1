@@ -51,7 +51,7 @@ if __name__ == "__main__":
       cep = argumentos[1:2]
       cep = str(cep[0])
     else:
-      cep = str(input("Infrome um CEP da regiao do Brasil (so numeros): ")).strip()
+      cep = str(input("Informe um CEP da regiao do Brasil (so numeros): ")).strip()
     mostrar_dados(obter_cep(cep))
     sleep(60)
     print("Programa Encerrado")
