@@ -44,6 +44,7 @@ def mostrar_dados(dados_json: dict = {}) -> str:
 if __name__ == "__main__":
 
   import sys
+  from time import sleep
   try:
     argumentos = sys.argv
     if len(argumentos) > 1:
@@ -52,5 +53,8 @@ if __name__ == "__main__":
     else:
       cep = str(input("Infrome um CEP da regiao do Brasil (so numeros): ")).strip()
     mostrar_dados(obter_cep(cep))
+    sleep(60)
+    print("Programa Encerrado")
   except BaseException:
     print("erro: Um erro ocorreu no programa.")
+    print("Programa Encerrado")
