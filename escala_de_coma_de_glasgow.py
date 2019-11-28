@@ -59,7 +59,7 @@ ESCALA = {
     "Extensao anormal": 2,
     "Sem resposta": 1
   }}
-RESULTADO = {"Trauma leve":{13,14,15},"Truma moderado":{9,10,11,12},"Trauma grave":{3,4,5,6,7,8}}
+RESULTADO = {"Trauma leve":{13,14,15},"Trauma moderado":{9,10,11,12},"Trauma grave":{3,4,5,6,7,8}}
 
 soma: int = 0
 print()
