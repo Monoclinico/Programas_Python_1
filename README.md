@@ -7,3 +7,4 @@
 - [x] Verificador simples de sequências strings para saber se é um palíndromo. [Veja Aqui](palindromo.py)  
 - [x] Módulo para criptografia e descriptografia de Júlio Cesar V1.0. [Veja Aqui](criptografia_cesar.py)
 - [x] Algoritmo que lê o número de litros vendidos e o tipo de combustível. Calcula e imprime o valor a ser pago pelo cliente. [Veja Aqui](combustivel.py)
+- [x] A Escala de Glasgow foi criada em 1974 por dois professores de neurologia da Universidade de Glasgow (Escocia) para medir o nivel de consciencia após uma lesão cerebral. [Veja Aqui] (escala_de_coma_de_glasgow.py)
