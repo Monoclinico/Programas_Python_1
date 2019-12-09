@@ -95,4 +95,6 @@ for trauma in RESULTADO.keys():
 		print(" => SOMA = {}".format(soma))
 		print(" => CORRESPONDE A: {}".format(trauma))
 		break
+print()
+encerrar = input(" Aperte ENTER para encerrar ".center(50,"="))
 #Fim
